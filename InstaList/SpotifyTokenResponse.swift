@@ -12,4 +12,11 @@ struct SpotifyTokenResponse: Decodable {
     let TokenType: String
     let ExpiresIn: Int
     let RefreshToken: String?
+    
+    enum CodingKeys : String, CodingKey {
+        case AccessToken = "access_token"
+        case TokenType = "token_type"
+        case ExpiresIn = "expires_in"
+        case RefreshToken = "refresh_token"
+    }
 }

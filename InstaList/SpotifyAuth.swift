@@ -17,9 +17,8 @@ final class SpotifyAuth: NSObject {
     private let clientID = "3ff12c8d8ea749d98dc5a84e0d8b49bf"
     private let redirectURI = "instalist://callback"
     private let scopes = "playlist-modify-public playlist-modify-private"
-    private let logger = Logger(subsystem: "com.yourcompany.InstaList", category: "SpotifyAuth")
+    private let logger = Logger(subsystem: "InstaList", category: "SpotifyAuth")
     
-    private var accessCode: String?
     
     func login() async throws {
         let codeVerifier = Self.generateCodeVerifier()
@@ -35,7 +34,8 @@ final class SpotifyAuth: NSObject {
             "&code_challenge=\(codeChallenge)"
         )!
         
-        accessCode = try await authenticate(withURL: authURL)
+        let accessCode = try await authenticate(withURL: authURL)
+        let token = try await exchangeCodeForTokens(withCodeVerifier: codeVerifier, code: accessCode)
     }
 
     private func authenticate(withURL authURL : URL) async throws -> String {
@@ -47,21 +47,47 @@ final class SpotifyAuth: NSObject {
                     let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
                     let code = queryItems.first(where: { $0.name == "code" })?.value
                 else {
-                    
-                    let authError = NSError(domain: "SpotifyAuth", code: -1, userInfo: [NSLocalizedDescriptionKey : error?.localizedDescription ?? ""])
-                    self.logger.error("Login failed or was cancelled: \(authError.localizedDescription)")
+                    let authError = NSError(domain: "SpotifyAuth",
+                                            code: -1,
+                                            userInfo: [NSLocalizedDescriptionKey : error?.localizedDescription ?? ""])
                     continuation.resume(throwing: authError)
                     return
                 }
                 
                 self.logger.debug("Authorization code: \(code, privacy: .sensitive)")
                 continuation.resume(returning: code)
-                // Next: exchange code for access token
             }
-            session.presentationContextProvider = self
             
+            session.presentationContextProvider = self
             session.start()
         }
+    }
+    
+    private func exchangeCodeForTokens(withCodeVerifier codeVerifier: String, code: String) async throws -> SpotifyTokenResponse {
+        let components = URLComponents(string: "https://accounts.spotify.com/api/token")!
+        let params = [
+            "client_id": clientID,
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": redirectURI,
+            "code_verifier": codeVerifier
+        ]
+
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = params
+            .map { "\($0.key)=\($0.value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)" }
+            .joined(separator: "&")
+            .data(using: .utf8)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw NSError(domain: "SpotifyAuth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to exchange token"])
+        }
+
+        let decoded = try JSONDecoder().decode(SpotifyTokenResponse.self, from: data)
+        return decoded
     }
     
     private static func generateCodeVerifier() -> String {
