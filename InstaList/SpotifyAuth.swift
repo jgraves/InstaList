@@ -13,8 +13,8 @@ import OSLog
 @MainActor
 final class SpotifyAuth: NSObject {
     static let shared = SpotifyAuth()
-
-    private let clientID = "3ff12c8d8ea749d98dc5a84e0d8b49bf"
+    
+    private let clientID = "3ff12c8d8ea749d98dc5a84e0d8b49bf" //assigned by Spotify App Dashboard
     private let redirectURI = "instalist://callback"
     private let scopes = "playlist-modify-public playlist-modify-private"
     private let logger = Logger(subsystem: "InstaList", category: "SpotifyAuth")
@@ -81,9 +81,10 @@ final class SpotifyAuth: NSObject {
             .joined(separator: "&")
             .data(using: .utf8)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await URLSession.shared.data(for: request) //creates and uses a URLSessionDataTask under the hood
+        
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw NSError(domain: "SpotifyAuth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to exchange token"])
+            throw NSError(domain: "SpotifyAuth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to exchange code for token"])
         }
 
         let decoded = try JSONDecoder().decode(SpotifyTokenResponse.self, from: data)
