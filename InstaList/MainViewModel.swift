@@ -22,7 +22,8 @@ class MainViewModel  {
         Task {
             authenticationStatus = "Authenticating..."
             do {
-                try await auth.login()
+                let response = try await auth.login()
+                SpotifySessionManager.shared.saveTokenResponse(response)
                 authenticationStatus = "Authenticated!"
             }
             catch {

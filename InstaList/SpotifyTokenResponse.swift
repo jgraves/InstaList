@@ -13,6 +13,14 @@ struct SpotifyTokenResponse: Decodable {
     let ExpiresIn: Int
     let RefreshToken: String?
     
+    var ExpirationTimestamp : String {
+        get {
+            let expirationDate = Date().addingTimeInterval(TimeInterval(ExpiresIn))
+            let expirationTimestamp = expirationDate.timeIntervalSince1970
+            return String(expirationTimestamp)
+        }
+    }
+    
     enum CodingKeys : String, CodingKey {
         case AccessToken = "access_token"
         case TokenType = "token_type"

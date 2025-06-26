@@ -20,7 +20,7 @@ final class SpotifyAuth: NSObject {
     private let logger = Logger(subsystem: "InstaList", category: "SpotifyAuth")
     
     
-    func login() async throws {
+    func login() async throws -> SpotifyTokenResponse {
         let codeVerifier = Self.generateCodeVerifier()
         let codeChallenge = Self.generateCodeChallenge(from: codeVerifier)
         
@@ -35,7 +35,8 @@ final class SpotifyAuth: NSObject {
         )!
         
         let accessCode = try await authenticate(withURL: authURL)
-        let token = try await exchangeCodeForTokens(withCodeVerifier: codeVerifier, code: accessCode)
+        
+        return try await exchangeCodeForTokens(withCodeVerifier: codeVerifier, code: accessCode)
     }
 
     private func authenticate(withURL authURL : URL) async throws -> String {
@@ -97,7 +98,7 @@ final class SpotifyAuth: NSObject {
     }
 
     private static func generateCodeChallenge(from verifier: String) -> String {
-        guard let data = verifier.data(using: .utf8) else { return "" }
+        let data = verifier.data(using: .utf8)! //this should never be nil given we're generating the verifier string ourselves
 
         var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
         data.withUnsafeBytes {

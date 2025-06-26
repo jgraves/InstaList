@@ -13,8 +13,9 @@ import OSLog
 enum Keychain {
 
     enum Keys : String {
-        case accessTokenKey = "accessToken"
-        case refreshTokenKey = "refreshToken"
+        case AccessTokenKey = "spotifyAccessToken"
+        case RefreshTokenKey = "spotifyRefreshToken"
+        case TokenExpirationKey = "spotifyTokenExpiration"
     }
     
     @discardableResult
@@ -22,7 +23,7 @@ enum Keychain {
         guard let data = value.data(using: .utf8) else { return false }
         
         // Delete existing item first since the Keychain will complain if we try to add a dupe
-        clear(key)
+        self.clearValue(forKey: key)
 
         let addQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -34,7 +35,7 @@ enum Keychain {
         return status == errSecSuccess
     }
     
-    static func get(forKey key: Keychain.Keys) -> String? {
+    static func string(forKey key: Keychain.Keys) -> String? {
         let getQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -53,7 +54,7 @@ enum Keychain {
     }
     
     @discardableResult
-    static func clear(_ key: Keychain.Keys) -> Bool {
+    static func clearValue(forKey key: Keychain.Keys) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key
