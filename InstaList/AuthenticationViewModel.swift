@@ -12,17 +12,16 @@ import OSLog
 
 @MainActor
 @Observable
-class MainViewModel  {
+class AuthenticationViewModel  {
     var authenticationStatus = "Ready to Authenticate!"
     
-    private let auth = SpotifyAuth()
-    private let logger = Logger(subsystem: "InstaList", category: "MainViewModel")
+    private let logger = Logger.init(category: #fileID)
     
     public func authenticate() {
         Task {
             authenticationStatus = "Authenticating..."
             do {
-                let response = try await auth.login()
+                let response = try await SpotifyAuth.shared.login()
                 SpotifySessionManager.shared.saveTokenResponse(response)
                 authenticationStatus = "Authenticated!"
             }

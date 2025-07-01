@@ -17,7 +17,7 @@ final class SpotifyAuth: NSObject {
     private let clientID = "3ff12c8d8ea749d98dc5a84e0d8b49bf" //assigned by Spotify App Dashboard
     private let redirectURI = "instalist://callback"
     private let scopes = "playlist-modify-public playlist-modify-private"
-    private let logger = Logger(subsystem: "InstaList", category: "SpotifyAuth")
+    private let logger = Logger.init(category: #fileID)
     
     
     func login() async throws -> SpotifyTokenResponse {

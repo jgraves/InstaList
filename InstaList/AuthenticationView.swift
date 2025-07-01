@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct AuthenticationView: View {
     
-    @State private var viewModel = MainViewModel()
+    @State private var viewModel = AuthenticationViewModel()
     
     var body: some View {
         Button(viewModel.authenticationStatus, systemImage:"arrow.up.circle.fill",action: viewModel.authenticate)
@@ -17,5 +17,5 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    AuthenticationView()
 }

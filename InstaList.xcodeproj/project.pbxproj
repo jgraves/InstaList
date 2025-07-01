@@ -33,11 +33,24 @@
 		998BCB452E00C0210083C7BB /* Exceptions for "InstaList" folder in "InstaListUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				MainView.swift,
-				MainViewModel.swift,
+				AppState.swift,
+				AuthenticationView.swift,
+				AuthenticationViewModel.swift,
+				Logger.swift,
+				MainAppView.swift,
+				RootView.swift,
 				SpotifyTokenResponse.swift,
 			);
 			target = 99ADF44B2DF9C97A00255D9B /* InstaListUITests */;
+		};
+		999ED8EB2E142CC600739F7E /* Exceptions for "InstaList" folder in "InstaListTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppState.swift,
+				Logger.swift,
+				MainAppView.swift,
+			);
+			target = 99ADF4412DF9C97A00255D9B /* InstaListTests */;
 		};
 		99ADF4602DF9E35300255D9B /* Exceptions for "InstaList" folder in "InstaList" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -53,6 +66,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				99ADF4602DF9E35300255D9B /* Exceptions for "InstaList" folder in "InstaList" target */,
+				999ED8EB2E142CC600739F7E /* Exceptions for "InstaList" folder in "InstaListTests" target */,
 				998BCB452E00C0210083C7BB /* Exceptions for "InstaList" folder in "InstaListUITests" target */,
 			);
 			path = InstaList;
