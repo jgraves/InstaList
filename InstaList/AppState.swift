@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 @Observable
-class AppState {
+class AppState  {
     enum AuthState {
         case unauthenticated
         case authenticated

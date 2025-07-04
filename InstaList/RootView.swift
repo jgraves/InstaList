@@ -10,10 +10,14 @@ import SwiftUI
 
 
 struct RootView : View {
-    @State private var viewModel = AppState()
+    private var appState : AppState
 
+    init(appState : AppState) {
+        self.appState = appState
+    }
+    
     var body: some View {
-        switch viewModel.authState {
+        switch appState.authState {
         case .unauthenticated:
             AuthenticationView()
         case .authenticated:
