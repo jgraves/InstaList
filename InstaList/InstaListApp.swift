@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct InstaListApp: App {
     
-    @State private var appState = AppState()
+    private var appState = AppState()
     
     var body: some Scene {
         WindowGroup {
