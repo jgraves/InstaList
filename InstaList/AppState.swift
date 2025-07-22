@@ -6,28 +6,37 @@
 //
 
 import Foundation
+import OSLog
 
 @MainActor
 @Observable
-class AppState  {
+class AppState {
+    
+    let sessionManager = SpotifySessionManager()
+    let spotifyAuth = SpotifyAuth()
+    let logger = Logger.init(category: #fileID)
+    
     enum AuthState {
+        case initializing
         case unauthenticated
         case authenticated
     }
 
-    var authState: AuthState = .unauthenticated
+    var authState: AuthState = .initializing
 
-    func checkAuthentication() async {
-        // Logic to load saved session/token
+    func updateAuthenticatedStatus() {
+        authState = sessionManager.isLoggedIn ? .authenticated : .unauthenticated
     }
 
-    func login() async {
-        // Do login logic
-        authState = .authenticated
+    func login() async throws {
+        let response = try await spotifyAuth.login()
+        sessionManager.saveTokenResponse(response)
+        updateAuthenticatedStatus()
     }
 
     func logout() {
-        // Do logout logic
-        authState = .unauthenticated
+        sessionManager.clearSession()
+        updateAuthenticatedStatus()
     }
 }
+

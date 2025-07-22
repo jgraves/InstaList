@@ -18,7 +18,7 @@ enum Keychain {
     }
     
     @discardableResult
-    static func set(_ value: String, forKey key: Keychain.Keys) -> Bool{
+    static func set(_ value: String, forKey key: Keychain.Keys) -> Bool {
         guard let data = value.data(using: .utf8) else { return false }
         
         // Delete existing item first since the Keychain will complain if we try to add a dupe

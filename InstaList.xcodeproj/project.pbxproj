@@ -35,9 +35,8 @@
 			membershipExceptions = (
 				AppState.swift,
 				AuthenticationView.swift,
-				AuthenticationViewModel.swift,
+				LoggedInView.swift,
 				Logger.swift,
-				MainAppView.swift,
 				RootView.swift,
 				SpotifyTokenResponse.swift,
 			);
@@ -47,8 +46,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AppState.swift,
+				LoggedInView.swift,
 				Logger.swift,
-				MainAppView.swift,
 			);
 			target = 99ADF4412DF9C97A00255D9B /* InstaListTests */;
 		};

@@ -18,10 +18,12 @@ struct RootView : View {
     
     var body: some View {
         switch appState.authState {
+        case .initializing:
+            EmptyView()
         case .unauthenticated:
-            AuthenticationView()
+            AuthenticationView(appState: appState)
         case .authenticated:
-            MainAppView()
+            LoggedInView(appState: appState)
         }
     }
 }

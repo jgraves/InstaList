@@ -7,10 +7,8 @@
 
 import Foundation
 
-final class SpotifySessionManager {
-    static let shared = SpotifySessionManager()
-
-    private init() {}
+@MainActor
+class SpotifySessionManager {
 
     var accessToken: String? {
         Keychain.string(forKey: Keychain.Keys.AccessTokenKey)

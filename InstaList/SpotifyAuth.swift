@@ -12,7 +12,6 @@ import OSLog
 
 @MainActor
 final class SpotifyAuth: NSObject {
-    static let shared = SpotifyAuth()
     
     private let clientID = "3ff12c8d8ea749d98dc5a84e0d8b49bf" //assigned by Spotify App Dashboard
     private let redirectURI = "instalist://callback"
