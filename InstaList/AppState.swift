@@ -23,7 +23,7 @@ class AppState {
     }
 
     var authState: AuthState = .initializing
-
+    
     func updateAuthenticatedStatus() {
         authState = sessionManager.isLoggedIn ? .authenticated : .unauthenticated
     }

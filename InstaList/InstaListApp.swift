@@ -15,6 +15,9 @@ struct InstaListApp: App {
     var body: some Scene {
         WindowGroup {
             RootView(appState: appState)
+                .task {
+                    appState.updateAuthenticatedStatus()
+                }
         }
     }
 }

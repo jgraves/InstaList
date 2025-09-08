@@ -19,7 +19,7 @@ struct RootView : View {
     var body: some View {
         switch appState.authState {
         case .initializing:
-            EmptyView()
+            ProgressView("Loading...")
         case .unauthenticated:
             AuthenticationView(appState: appState)
         case .authenticated:
